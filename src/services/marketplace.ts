@@ -1,9 +1,12 @@
-import type { VerificationDecision } from '../domain';
+import type { AuthorizationStatus, VerificationDecision } from '../domain';
 import { ServiceError } from './contracts';
 import { createHttpClient } from './http';
 
-interface MarketplaceVerification {
+export interface MarketplaceVerification {
   decision: VerificationDecision | null;
+  match_found?: boolean;
+  authorization_status?: AuthorizationStatus;
+  registration_id?: string;
 }
 
 export interface MarketplaceService {
@@ -27,8 +30,17 @@ function decodeSellerContext(body: unknown): MarketplaceSellerContext | null {
 function decodeResult(body: unknown): MarketplaceVerification {
   if (typeof body !== 'object' || body === null || !('decision' in body)) throw new ServiceError('unavailable');
   const { decision } = body;
-  if (decision === 'allow' || decision === 'review' || decision === 'hold_for_review' || decision === null) return { decision };
-  throw new ServiceError('unavailable');
+  if (decision !== 'allow' && decision !== 'review' && decision !== 'hold_for_review' && decision !== null) throw new ServiceError('unavailable');
+  const result: MarketplaceVerification = { decision };
+  if ('match_found' in body && typeof body.match_found === 'boolean') result.match_found = body.match_found;
+  if ('registration_id' in body && typeof body.registration_id === 'string' && body.registration_id) result.registration_id = body.registration_id;
+  const authorization = 'authorization_status' in body ? body.authorization_status : undefined;
+  if (authorization === 'authorized' || authorization === 'not_recorded' || authorization === 'unknown' || authorization === 'not_applicable') {
+    result.authorization_status = authorization;
+  } else if ('authorized' in body && typeof body.authorized === 'boolean') {
+    result.authorization_status = body.authorized ? 'authorized' : 'not_recorded';
+  }
+  return result;
 }
 
 export function createMarketplaceHttpService(endpoint: URL, contextEndpoint?: URL): MarketplaceService {

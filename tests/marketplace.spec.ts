@@ -18,6 +18,7 @@ for (const [scenario, result] of [
     await page.getByRole('button', { name: 'التحقق ومتابعة النشر' }).click();
     await expect(page.getByText(result, { exact: false })).toBeVisible();
     await expect(page.locator('input[name=seller_id]')).toHaveCount(0);
+    await expect(page.getByRole('img', { name: 'معاينة صورة المنتج' })).toBeVisible();
     if (scenario === 'allow_authorized') {
       await page.getByRole('button', { name: 'إزالة الصورة' }).click();
       await expect(page.getByRole('img')).toHaveCount(0);
@@ -46,7 +47,10 @@ test('marketplace controls work on narrow and wide layouts', async ({ page }) =>
   await page.getByLabel('اسم المنتج').fill('مزهرية مصنوعة يدويًا من الخزف الأزرق للمجموعات المنزلية'.repeat(4));
   await page.getByLabel('التقاط صورة بالكاميرا').setInputFiles('public/media/submission.jpg');
   await expect(page.getByRole('img', { name: 'معاينة صورة المنتج' })).toBeVisible();
-  await page.getByLabel('اختيار ملف الصورة').setInputFiles('public/media/ceramic.jpg');
+  const fileInput = page.getByLabel('اختيار ملف الصورة');
+  await fileInput.focus();
+  const [chooser] = await Promise.all([page.waitForEvent('filechooser'), fileInput.press('Enter')]);
+  await chooser.setFiles('public/media/ceramic.jpg');
   await expect(page.getByText('ceramic.jpg')).toBeVisible();
   await page.getByRole('button', { name: 'التحقق ومتابعة النشر' }).click();
   await expect(page.locator('.market-result')).toBeVisible();
