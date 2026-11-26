@@ -297,3 +297,273 @@ Output:
 - ما الذي تغير في النصوص
 - كيف قللت الفراغ الأبيض
 - كيف حسّنت قابلية قراءة التنبيهات
+
+## 03 — المصنفات · `/portal/works`
+
+![مرجع بصري لشاشة المصنفات](ui-inspiration/03-protected-works.png)
+
+### Prompt
+
+طوّر شاشة **المصنفات** الحالية في «إذن» لتصبح **Registry Ledger / Rights Catalog** واضحة وغنية بصريًا، مستلهمة من الصورة المرجعية المرفقة، مع الحفاظ على نفس الوظائف والبيانات الموجودة في المشروع.
+
+استخدم الصورة المرجعية كـ **Visual Direction فقط**، ولا تنسخها حرفيًا.
+
+#### الهدف
+
+حوّل الشاشة من:
+
+- عنوان
+- بحث
+- فلتر
+- صف واحد
+- مساحة بيضاء كبيرة
+
+إلى:
+
+**سجل حقوق تشغيلي منظم** يساعد صاحب الحق على:
+
+- رؤية جميع المصنفات المرتبطة به.
+- معرفة حالة كل مصنف.
+- رؤية آخر نشاط مرتبط به.
+- الوصول إلى التفاصيل بسرعة.
+- فهم مصدر التسجيل وحالة البيانات.
+
+---
+
+#### 1. Header / Hero
+
+احتفظ بعنوان: **المصنفات**
+
+والوصف: **الصور والمحتوى المرتبط بسجل حقوقك.**
+
+أضف Visual Header خفيف يحتوي على:
+
+- soft lavender atmosphere
+- layered image/content motif
+- خطوط Verification / Registry خفيفة
+- geometry مستوحاة من هوية «إذن»
+
+الأبيض يبقى الأساس.
+
+---
+
+#### 2. Summary
+
+إذا كانت البيانات الحالية تدعم counts حقيقية، أضف ملخصًا صغيرًا مثل:
+
+- إجمالي المصنفات
+- مكتملة
+- قيد التسجيل / تحتاج استكمال
+
+لا تضف أرقامًا وهمية.
+
+إذا لم تكن counts متاحة من Service Layer، لا تخترعها.
+
+تجنب KPI cards التقليدية قدر الإمكان؛ استخدم summary blocks خفيفة ومتكاملة مع الصفحة.
+
+---
+
+#### 3. Search & Filters
+
+حسّن منطقة البحث والتصفية بحيث تكون compact وواضحة.
+
+استخدم فقط الفلاتر المدعومة حاليًا، مثل:
+
+- البحث بالاسم أو معرف التسجيل
+- حالة التسجيل
+
+يمكن إضافة:
+
+- sort by latest activity
+- list/grid toggle
+
+فقط إذا كانت الوظيفة والبيانات تدعم ذلك بالفعل.
+
+---
+
+#### 4. Registry Ledger Rows
+
+حوّل كل مصنف إلى Row غني بدل صف نصي بسيط.
+
+كل row يمكن أن يتضمن:
+
+- thumbnail واضحة
+- اسم المصنف
+- registration/reference ID
+- مصدر التسجيل
+- حالة التسجيل
+- آخر نشاط مرتبط
+- آخر تحديث / تاريخ
+- CTA:
+  - عرض التفاصيل
+  - استكمال التسجيل، إذا كان هذا state موجودًا فعليًا
+
+لا تضف Actions غير موجودة في Sources.
+
+---
+
+#### 5. Visual Hierarchy
+
+اجعل أهم العناصر بالترتيب:
+
+1. الصورة
+2. اسم المصنف
+3. حالة التسجيل
+4. مصدر التسجيل
+5. آخر نشاط
+6. الإجراءات
+
+استخدم:
+
+- strong typography
+- subtle borders
+- small provenance icons
+- semantic status cues
+- thin structural separators
+
+---
+
+#### 6. Status Design
+
+اعرض حالات التسجيل بصريًا باستخدام:
+
+- icon
+- label
+- subtle semantic color
+
+مثل:
+
+- مكتمل
+- قيد التسجيل
+- يحتاج استكمال
+
+لكن لا تعتمد على اللون وحده.
+
+ولا تكثر من pills.
+
+---
+
+#### 7. Visual Density
+
+المشكلة الحالية الرئيسية هي الفراغ الكبير.
+
+قلل الإحساس بالفراغ عبر:
+
+- ledger rows أكثر وضوحًا
+- metadata
+- thumbnails
+- structured header
+- summary
+- filters
+- subtle background linework
+- light lavender zones
+
+لا تضف بيانات مزيفة فقط لملء الشاشة.
+
+إذا كانت البيانات الحالية تحتوي على مصنف واحد فقط، صمّم الـlayout بحيث يدعم عدة مصنفات مستقبلاً بدون اختراع entries جديدة.
+
+---
+
+#### 8. لغة «إذن» البصرية
+
+استخدم:
+
+- Royal Purple
+- Soft Lavender
+- Content Layers
+- Registry / Verification linework
+- thin geometric frames
+- subtle depth
+- provenance/source icons
+
+تجنب:
+
+- generic SaaS table
+- blank white canvas
+- heavy cards
+- neon
+- random gradient blobs
+- glassmorphism مبالغ
+
+---
+
+#### 9. النصوص
+
+راجع النصوص لتكون واضحة.
+
+لا تكتفِ بمصطلحات مثل:
+
+**المصنف**
+
+**التسجيل**
+
+**السجل**
+
+بدون سياق.
+
+استخدم helper text عند الحاجة مثل: **الصور والمحتوى المرتبط بسجل حقوقك.**
+
+حافظ على المصطلحات القانونية المعتمدة، لكن اجعلها مفهومة للمستخدم.
+
+---
+
+#### 10. Responsive
+
+Desktop:
+
+- ledger واسع
+- الفلاتر واضحة
+- الصور والmetadata تستفيد من المساحة
+
+Mobile:
+
+- كل مصنف يتحول إلى compact stacked entry
+- الصورة تبقى واضحة
+- الحالة ظاهرة
+- CTA واضح
+- metadata تختصر بذكاء
+- لا horizontal overflow
+
+---
+
+#### 11. Motion
+
+استخدم motion خفيف فقط:
+
+- hover/focus
+- filter changes
+- opening work details
+- transition من row إلى Work Details عند الإمكان
+
+احترم: `prefers-reduced-motion`
+
+---
+
+#### 12. لا تغيّر المنطق
+
+لا تضف:
+
+- registry truth جديدة
+- legal conclusions
+- authorization logic
+- new registration workflow غير موجود
+- fake activity
+
+الواجهة فقط تعرض بيانات Service Layer الحالية.
+
+بعد التنفيذ:
+
+- شغّل build
+- lint
+- typecheck
+- tests
+- visual QA
+
+ثم أعطني Closure Report مختصر يتضمن:
+
+- كيف تحولت الشاشة إلى Registry Ledger
+- كيف قللت الفراغ الأبيض
+- ما الذي تغير في الـhierarchy
+- ما الذي تغير في النصوص
+- كيف استخدمت الصور والmetadata
+- نتائج الاختبارات
