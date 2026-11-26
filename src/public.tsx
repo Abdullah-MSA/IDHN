@@ -1,8 +1,9 @@
 ﻿import { useState } from 'react';
-import { KeyRound, Layers3, ScanLine, BookOpenText, GitCommitHorizontal, ShieldCheck, UserRoundCheck, Eye, EyeOff } from 'lucide-react';
+import { KeyRound, Layers3, ScanLine, BookOpenText, GitCommitHorizontal, ShieldCheck, UserRoundCheck, Eye, EyeOff, Mail, LockKeyhole } from 'lucide-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Navigate } from 'react-router-dom';
 import { Action, authKey, Back, ErrorState, Pending, services, Title, useSession, workspaceByRole } from './ui';
+import { LayerMotif } from './visuals';
 
 const stages = [
   { label: 'استلام الصورة', detail: 'يرسل السوق صورة المنتج للتحقق قبل النشر.', icon: Layers3 },
@@ -102,16 +103,19 @@ export function Login() {
           login.mutate({ identifier, password });
         }}>
           <fieldset disabled={login.isPending}>
-            <label className="field" htmlFor="login-identifier">البريد الإلكتروني
+            <label className="field" htmlFor="login-identifier">البريد الإلكتروني</label>
+            <div className="identity-field">
+              <Mail size={18} aria-hidden="true" />
               <input id="login-identifier" name="identifier" type="email" autoComplete="username" dir="ltr" required aria-invalid={Boolean(errors.identifier)}
                 aria-describedby={errors.identifier ? 'login-identifier-error' : undefined} onChange={() => {
                   if (errors.identifier) setErrors(previous => ({ ...previous, identifier: undefined }));
                   if (login.isError) login.reset();
                 }} />
-            </label>
+            </div>
             {errors.identifier && <p id="login-identifier-error" className="identity-field-error" role="alert">{errors.identifier}</p>}
             <label className="field" htmlFor="login-password">كلمة المرور</label>
-            <div className="identity-password">
+            <div className="identity-field identity-password">
+              <LockKeyhole size={18} aria-hidden="true" />
               <input id="login-password" name="password" type={showPassword ? 'text' : 'password'} autoComplete="current-password" dir="ltr" required aria-invalid={Boolean(errors.password)}
                 aria-describedby={errors.password ? 'login-password-error' : undefined} onChange={() => {
                   if (errors.password) setErrors(previous => ({ ...previous, password: undefined }));
@@ -128,17 +132,17 @@ export function Login() {
           {login.isPending && <span role="status">جارٍ التحقق من بيانات الحساب.</span>}
           {login.isError && <ErrorState error={login.error} />}
         </form>}
+      <p className="identity-session-note"><ShieldCheck size={18} aria-hidden="true" />صلاحيات الوصول مرتبطة بحسابك.</p>
       </div>
-      <div className="identity-visual" aria-hidden="true">
-        <div className="identity-layer layer-back" /><div className="identity-layer layer-middle" />
-        <div className="identity-layer layer-front"><img src="/media/mark.svg" alt="" /></div>
-        <div className="identity-trace"><i /><i /><i /></div>
+      <div className="identity-visual">
+        <LayerMotif icon={ScanLine} image />
+        <div className="identity-visual-copy"><h2>تحقّق من حقوق الصور قبل النشر</h2><p>من الصورة المقدّمة إلى مراجعة سجل الحقوق والإذن باستخدامها.</p></div>
       </div>
     </div>
     <ol className="identity-sequence" aria-label="خطوات الوصول إلى مساحة العمل">
       <li><UserRoundCheck aria-hidden="true" /><div><strong>التحقق من الهوية</strong><span>دخول موثّق</span></div></li>
       <li><ShieldCheck aria-hidden="true" /><div><strong>تحديد الصلاحيات</strong><span>حسب دور الحساب</span></div></li>
-      <li><Layers3 aria-hidden="true" /><div><strong>فتح مساحة العمل</strong><span>إجراءات المراجعة قابلة للتتبع</span></div></li>
+      <li><Layers3 aria-hidden="true" /><div><strong>فتح مساحة العمل</strong><span>إجراءات المراجعة قبل النشر</span></div></li>
     </ol>
   </section>;
 }

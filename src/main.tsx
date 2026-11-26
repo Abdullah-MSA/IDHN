@@ -6,6 +6,7 @@ import './workspace.css';
 import './atmosphere.css';
 import './marketplace.css';
 import './corrections.css';
+import './reference-ui.css';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
