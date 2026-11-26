@@ -1,7 +1,16 @@
 import { BookOpenText, Fingerprint, ScanLine, TriangleAlert } from 'lucide-react';
 import { useRef, type ReactNode } from 'react';
-import type { VerificationDetail } from './domain';
+import type { Verification, VerificationDetail } from './domain';
 import { authorizations, date, Decision, EvidenceImage, Id, reviewStatuses, Trace } from './ui';
+import { sharedMediaName } from './visuals';
+
+export function verificationReason(item: Verification) {
+  if (item.system_reason) return item.system_reason;
+  if (item.evidence_availability === 'registry_unavailable') return 'توقف التحقق عند سجل الحقوق لأن بياناته غير متاحة.';
+  if (item.match_found && item.authorization_status === 'not_recorded') return 'وجد النظام تشابهًا بصريًا مع صورة مرتبطة بسجل الحقوق، ولم يعثر على إذن مسجّل للبائع.';
+  if (!item.match_found && item.matched_image_url && item.decision === 'review') return 'وجد النظام صورة مرشحة، وتحتاج المقارنة إلى مراجعة.';
+  if (item.authorization_status === 'unknown') return 'لم تكفِ البيانات المتاحة لتأكيد الإذن.';
+}
 
 export function Facts({ rows }: { rows: [string, ReactNode][] }) {
   return <dl className="facts">{rows.map(([label, content]) => <div key={label}><dt>{label}</dt><dd>{content}</dd></div>)}</dl>;
@@ -12,11 +21,8 @@ export function Evidence({ item, children }: { item: VerificationDetail; childre
   const score = item.similarity_score;
   const inspector = useRef<HTMLDialogElement>(null);
   const reference = item.match_found ? 'الصورة المرجعية' : 'الصورة المرشحة للمقارنة';
-  return <>
-    <section className="outcome-bar" aria-label="الخلاصة التشغيلية">
-      <h2>نتيجة النظام</h2><Decision value={item.decision} />
-      {item.review_status && <p>{reviewStatuses[item.review_status]}</p>}
-    </section>
+  const reason = verificationReason(item);
+  return <div className="evidence-workspace">
     {item.evidence_availability !== 'full' && <div className="evidence-notice" role="status">
       <TriangleAlert size={21} aria-hidden="true" />
       {registryUnavailable ? 'سجل الحقوق غير متاح. توقف التحقق عند السجل ولا توجد نتيجة تشغيلية مكتملة.' : 'بعض المعلومات غير متاحة. يمكنك مراجعة الأدلة المتوفرة أدناه.'}
@@ -25,7 +31,7 @@ export function Evidence({ item, children }: { item: VerificationDetail; childre
       <section className="comparison" aria-labelledby="comparison-title">
         <div className="section-heading"><h2 id="comparison-title">مقارنة الصور</h2><ScanLine size={21} aria-hidden="true" /></div>
         <div className="image-pair">
-          <figure><EvidenceImage src={item.uploaded_image_url} label="الصورة المقدّمة من السوق" /><figcaption><strong>الصورة المقدّمة</strong><span>المصدر · {item.marketplace.name}</span></figcaption></figure>
+          <figure><EvidenceImage src={item.uploaded_image_url} label="الصورة المقدّمة من السوق" transitionName={sharedMediaName('verification', item.id)} /><figcaption><strong>الصورة المقدّمة</strong><span>المصدر · {item.marketplace.name}</span></figcaption></figure>
           <figure><EvidenceImage src={item.matched_image_url} label="الصورة المرجعية للمطابقة البصرية" /><figcaption><strong>{reference}</strong><span>{item.matched_image_url ? 'المصدر · ' + (item.registration_id ? 'سجل الحقوق' : 'خدمة المطابقة البصرية') : 'لم تُرجع الخدمة صورة مرجعية'}</span></figcaption></figure>
         </div>
         <div className="score-strip">
@@ -42,7 +48,13 @@ export function Evidence({ item, children }: { item: VerificationDetail; childre
           </div>
         </dialog>
       </section>
-      <aside className="evidence-rail" aria-label="السجل والإذن">
+      <aside className="evidence-rail" aria-label="خلاصة الحالة والسجل والإذن">
+        <section className="evidence-outcome" aria-label="الخلاصة التشغيلية">
+          <h2>خلاصة الحالة</h2>
+          <div className="evidence-system-result"><span>نتيجة النظام</span><Decision value={item.decision} /></div>
+          {item.review_status && <p className="evidence-review-status">حالة المراجعة · {reviewStatuses[item.review_status]}</p>}
+          {reason && !registryUnavailable && <p>{reason}</p>}
+        </section>
         <section><div className="section-heading"><h2>سجل الحقوق</h2><BookOpenText size={19} aria-hidden="true" /></div>
           {registryUnavailable ? <p>تعذّر الوصول إلى السجل.</p> : <Facts rows={[
             ['معرّف التسجيل', item.registration_id ? <Id>{item.registration_id}</Id> : 'غير متاح'],
@@ -52,7 +64,8 @@ export function Evidence({ item, children }: { item: VerificationDetail; childre
         </section>
         <section><div className="section-heading"><h2>إذن استخدام الصورة</h2><Fingerprint size={19} aria-hidden="true" /></div>
           <p>{registryUnavailable ? 'لم تكتمل خطوة التحقق من الإذن.' : authorizations[item.authorization_status]}</p>
-          <small>البائع · <Id>{item.seller.id}</Id></small>
+          <small>البائع · {item.seller.display_name ?? <Id>{item.seller.id}</Id>}</small>
+          {item.evidence_availability === 'partial' && <small className="evidence-review-status">بعض بيانات التحقق غير متاحة.</small>}
         </section>
         {children}
       </aside>
@@ -67,5 +80,5 @@ export function Evidence({ item, children }: { item: VerificationDetail; childre
         ['حالة الإشعار', item.notification_status ? ({ sent: 'تم الإرسال', failed: 'تعذّر الإرسال', pending: 'بانتظار الإرسال', not_required: 'غير مطلوب' } as const)[item.notification_status] : 'غير متاحة'],
       ]} />
     </details>
-  </>;
+  </div>;
 }

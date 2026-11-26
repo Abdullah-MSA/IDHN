@@ -158,13 +158,13 @@ export function Data<T>({ query, children }: { query: UseQueryResult<T>; childre
 }
 const traceStates = { complete: 'مكتمل', active: 'جارٍ', pending: 'لم يكتمل', failed: 'تعذّر' };
 export function Trace({ steps }: { steps: VerificationTraceStep[] }) {
-  return <ol className="trace">{steps.map(step => <li key={step.id} data-state={step.status}>
+  return <ol className="trace">{steps.map(step => <li key={step.id} data-state={step.status} aria-current={step.status === 'active' ? 'step' : undefined}>
     <span className="trace-node" aria-hidden="true">{step.status === 'complete' ? <Check size={13} /> : step.status === 'failed' ? <AlertCircle size={15} /> : <Circle size={8} />}</span>
     <strong>{step.label}</strong><small>{sources[step.source]} · {traceStates[step.status]}</small>
   </li>)}</ol>;
 }
-export function EvidenceImage({ src, label, className }: { src?: string | null; label: string; className?: string }) {
-  return <div className={'evidence-image ' + (className ?? '')}>
+export function EvidenceImage({ src, label, className, transitionName }: { src?: string | null; label: string; className?: string; transitionName?: string }) {
+  return <div className={'evidence-image ' + (className ?? '')} style={transitionName ? { viewTransitionName: transitionName } : undefined}>
     {src ? <img src={src} alt={label} onError={event => { event.currentTarget.hidden = true; }} /> : null}
     <div className="image-fallback"><ImageOff aria-hidden="true" size={24} /> الصورة غير متاحة</div>
   </div>;
@@ -172,6 +172,6 @@ export function EvidenceImage({ src, label, className }: { src?: string | null; 
 export function FilterBar({ children }: { children: ReactNode }) {
   return <div className="filter-bar">{children}</div>;
 }
-export function Search({ value, onChange, label = 'بحث' }: { value: string; onChange: (value: string) => void; label?: string }) {
-  return <label className="field"><span>{label}</span><input type="search" value={value} onChange={event => onChange(event.target.value)} placeholder="اكتب للبحث" /></label>;
+export function Search({ value, onChange, label = 'بحث', placeholder = 'اكتب للبحث' }: { value: string; onChange: (value: string) => void; label?: string; placeholder?: string }) {
+  return <label className="field"><span>{label}</span><input type="search" value={value} onChange={event => onChange(event.target.value)} placeholder={placeholder} /></label>;
 }
