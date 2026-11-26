@@ -37,8 +37,8 @@ test('marketplace controls work on narrow and wide layouts', async ({ page }) =>
   await page.goto('/portal');
   await expect(page.getByRole('alert')).toContainText('ليس لديك صلاحية');
   await page.goto('/marketplace/pre-publish');
-  const verification = page.getByRole('complementary', { name: 'التحقق من حقوق الصورة بواسطة إذن' });
-  await expect(verification.getByText('صورة المنتج', { exact: true })).toHaveAttribute('aria-current', 'step');
+  const trace = page.getByRole('list', { name: 'مراحل التحقق' });
+  await expect(trace.locator('[aria-current="step"]')).toHaveText('صورة المنتج');
   for (const width of [360, 390, 430, 768, 1024, 1280, 1440, 1920]) {
     await page.setViewportSize({ width, height: 900 });
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
@@ -54,7 +54,8 @@ test('marketplace controls work on narrow and wide layouts', async ({ page }) =>
   await expect(page.getByText('ceramic.jpg')).toBeVisible();
   await page.getByRole('button', { name: 'التحقق ومتابعة النشر' }).click();
   await expect(page.locator('.market-result')).toBeVisible();
-  await expect(verification.getByText('النتيجة', { exact: true })).toHaveAttribute('aria-current', 'step');
+  await expect(trace.locator('[aria-current="step"]')).toHaveText('النتيجة');
+  await expect(trace.locator('[data-complete="true"]')).toHaveCount(2);
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
   await page.getByRole('button', { name: 'تسجيل الخروج' }).click();
   await expect(page).toHaveURL(/\/login$/);
