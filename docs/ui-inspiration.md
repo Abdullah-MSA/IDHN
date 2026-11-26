@@ -811,3 +811,545 @@ Mobile:
 - كيف تغيرت النصوص
 - كيف تم تحسين الجزء السفلي من الصفحة
 - نتائج الاختبارات
+
+## 05 — واجهة البائع · `/marketplace/pre-publish`
+
+![مرجع لحالتي رفع الصورة وظهور نتيجة التحقق في واجهة البائع](ui-inspiration/05-seller-upload-and-result.png)
+
+![مرجع لإعداد المنتج ومنطقة الرفع ولوحة التحقق](ui-inspiration/05-seller-upload-workspace.png)
+
+### Prompt — إضافة صورة المنتج
+
+طوّر شاشة **إضافة صورة المنتج** الخاصة بالبائع لتصبح واجهة Marketplace احترافية ومتكاملة، مستلهمة من الصورة المرجعية المرفقة، مع الحفاظ على نفس رحلة البائع والمنطق الموجود في المشروع.
+
+استخدم الصورة المرجعية كـ **Visual Direction فقط**، ولا تنسخها حرفيًا.
+
+#### الهدف
+
+حوّل الشاشة الحالية من:
+
+- عنوان
+- حقل اسم المنتج
+- مربع رفع صورة
+- لوحة تحقق صغيرة
+
+إلى: **Seller Product Publishing Workspace**
+
+بحيث يفهم البائع بوضوح:
+
+1. أضف بيانات المنتج
+2. ارفع صورة المنتج
+3. يتم التحقق من الصورة بواسطة «إذن»
+4. تظهر النتيجة
+5. يمكن متابعة النشر أو يتم تعليق الحالة للمراجعة
+
+---
+
+#### 1. Seller Workspace
+
+هذه الشاشة تخص **البائع داخل منصة التجارة** وليست بوابة صاحب الحق.
+
+يجب أن يظهر بوضوح أنها مساحة البائع، مثل: **مساحة البائع**
+
+مع بيانات الحساب الحالية من Session إن كانت متاحة.
+
+لا تجعل الواجهة تبدو كصفحة مستقلة غريبة عن النظام.
+
+يمكن أن تحتوي على Navigation جانبي أو علوي بسيط يوضح:
+
+- النظرة العامة
+- المنتجات
+- التحقق
+- الإشعارات
+- الإعدادات
+
+لكن فقط إذا كان ذلك مناسبًا لبنية التطبيق الحالية ولا يضيف وظائف غير موجودة.
+
+---
+
+#### 2. Header
+
+استخدم عنوانًا واضحًا: **إضافة صورة المنتج**
+
+والوصف: **تخضع صورة المنتج للتحقق قبل متابعة نشره.**
+
+أضف Header بصري خفيف:
+
+- soft lavender field
+- content/image layers
+- verification line
+- logo-derived geometry
+
+الأبيض يبقى الأساس.
+
+---
+
+#### 3. Product Preparation
+
+أنشئ مساحة واضحة بعنوان: **إعداد المنتج**
+
+وتحتوي على:
+
+- اسم المنتج
+- image upload area
+- drag & drop
+- اختيار صورة
+- التقاط صورة إذا كانت الوظيفة الحالية تدعمها
+- preview بعد الاختيار
+- replace/remove controls
+
+لا تضف حقول Product جديدة غير موجودة في النظام الحالي.
+
+---
+
+#### 4. Upload Area
+
+اجعل منطقة الرفع واضحة بصريًا وليست مجرد مستطيل رمادي.
+
+استخدم:
+
+- dashed subtle border
+- image icon
+- helper text
+- supported format text إذا كانت القيود موجودة فعلًا في الكود
+- hover / drag-over state
+- keyboard accessible file selection
+
+قبل اختيار الصورة:
+
+**اسحب صورة المنتج إلى هنا**
+
+أو: **اختر صورة من جهازك**
+
+بعد اختيار الصورة:
+
+- اعرض Preview واضحة
+- اسم الملف عند الحاجة
+- استبدال الصورة
+- إزالة الصورة
+- التقاط صورة إذا كان مدعومًا
+
+---
+
+#### 5. IDHN Verification Panel
+
+أضف لوحة سياقية واضحة بعنوان: **التحقق من حقوق الصورة بواسطة إذن**
+
+يجب أن تبدو كخدمة تحقق مدمجة داخل Marketplace.
+
+اعرض رحلة مختصرة: **صورة المنتج → التحقق → النتيجة**
+
+قبل الرفع:
+
+- المرحلة الحالية = صورة المنتج
+
+أثناء التحقق:
+
+- المرحلة الحالية = التحقق
+
+بعد وصول النتيجة:
+
+- المرحلة الحالية = النتيجة
+
+استخدم:
+
+- Royal Purple
+- IDHN symbol
+- verification trace
+- small state nodes
+
+ولا تجعل اللوحة تبدو كـmarketing card.
+
+---
+
+#### 6. Explaining the Verification
+
+يمكن أن تحتوي اللوحة على 2–3 نقاط قصيرة جدًا مثل:
+
+- **تحقق سريع قبل النشر**
+- **مقارنة مع الصور المرتبطة بسجل الحقوق**
+- **نتيجة واضحة قبل إكمال النشر**
+
+لا تستخدم صياغة تقول إن النظام "يمنع الاستخدام دون إذن" كحكم قانوني قطعي.
+
+---
+
+#### 7. Primary CTA
+
+استخدم زرًا واضحًا: **التحقق ومتابعة النشر**
+
+الزر يجب أن:
+
+- يكون disabled قبل إدخال البيانات المطلوبة
+- يدخل loading state أثناء إرسال الطلب
+- يمنع الإرسال المكرر
+- يعرض الخطأ بشكل مفهوم إذا فشل الطلب
+
+---
+
+#### 8. بعد رفع الصورة
+
+هذه الشاشة يجب أن تكون قابلة للتحول لنفس الـworkspace بدل الانتقال لواجهة مختلفة تمامًا.
+
+بعد اختيار الصورة:
+
+- Preview تكون العنصر الرئيسي
+- اسم المنتج يبقى ظاهرًا
+- verification panel تحدث حالتها
+- زر التحقق يصبح متاحًا
+
+بعد التحقق:
+
+- لا تعيد بناء الصفحة من الصفر
+- استخدم state transition داخل نفس التجربة
+
+---
+
+#### 9. Visual Style
+
+استخدم:
+
+- white dominant canvas
+- soft lavender
+- purple accents
+- subtle depth
+- thin structural borders
+- fine linework
+- content layers
+- verification nodes
+
+تجنب:
+
+- green marketplace branding القديم
+- generic SaaS cards
+- dark/heavy UI
+- neon
+- random blobs
+- excessive gradients
+
+---
+
+#### 10. Responsive
+
+Desktop:
+
+- Product workspace أساسي
+- IDHN verification panel جانبي أو سياقي
+
+Mobile:
+
+- workspace stacked
+- verification panel تحت معلومات المنتج
+- upload area سهلة اللمس
+- CTA بعرض مناسب
+- لا horizontal overflow
+
+---
+
+#### 11. Accessibility
+
+تأكد من:
+
+- keyboard file selection
+- visible focus
+- proper labels
+- error messages
+- button disabled states
+- drag & drop له بديل بالنقر
+
+---
+
+#### 12. لا تغيّر المنطق
+
+لا تضف:
+
+- seller ID input
+- thresholds
+- decision rules
+- legal conclusions
+
+Seller identity تأتي من Session.
+
+والقرار النهائي يأتي من Verification Service / Backend.
+
+بعد التنفيذ:
+
+- build
+- lint
+- typecheck
+- Playwright
+- visual QA
+
+ثم أعطني Closure Report يتضمن:
+
+- كيف أصبحت الشاشة Seller Workspace متكاملة
+- كيف تغير Upload UX
+- كيف أصبحت «إذن» ظاهرة كطبقة تحقق داخل السوق
+- كيف تعمل الحالات قبل الرفع / أثناء التحقق / بعد النتيجة
+- نتائج الاختبارات.
+
+### Prompt — ما بعد رفع صورة المنتج وظهور نتيجة التحقق
+
+طوّر حالة **ما بعد رفع صورة المنتج وظهور نتيجة التحقق** داخل واجهة البائع، مستلهمًا من الصورة المرجعية المرفقة، مع الحفاظ على نفس رحلة البائع الحالية ونفس منطق الـService Layer.
+
+استخدم الصورة المرجعية كـ **Visual Direction فقط**، ولا تنسخها حرفيًا.
+
+#### الهدف
+
+بعد أن يرفع البائع الصورة ويضغط:
+
+**التحقق ومتابعة النشر**
+
+لا تنتقل التجربة إلى شاشة مختلفة تمامًا.
+
+يجب أن تتحول **نفس Seller Workspace** إلى حالة نتيجة واضحة ومترابطة، بحيث يظل المستخدم داخل سياق المنتج نفسه.
+
+---
+
+#### 1. حافظ على نفس Workspace
+
+احتفظ بنفس:
+
+- عنوان الصفحة
+- اسم المنتج
+- الصورة المرفوعة
+- Seller navigation
+- خطوات الرحلة
+
+لا تعيد بناء الشاشة من الصفر.
+
+حوّل الحالة تدريجيًا من: **صورة المنتج** → **التحقق** → **النتيجة**
+
+باستخدام state transition واضح.
+
+---
+
+#### 2. Stepper
+
+استخدم Stepper واضح:
+
+1. صورة المنتج
+2. التحقق
+3. النتيجة
+
+قبل التحقق:
+
+- المرحلة 1 نشطة
+
+أثناء التحقق:
+
+- المرحلة 2 نشطة
+
+بعد وصول النتيجة:
+
+- المرحلة 3 نشطة
+- المراحل السابقة تظهر مكتملة
+
+لا تستخدم Progress وهمي أو timers غير مرتبطة بالـBackend.
+
+---
+
+#### 3. بعد رفع الصورة
+
+اعرض الصورة بشكل رئيسي داخل Product Workspace:
+
+- preview كبيرة
+- اسم المنتج
+- label: **الصورة المرفوعة**
+- استبدال الصورة
+- إزالة الصورة إذا كانت الوظيفة الحالية تدعمها
+
+حافظ على aspect ratio.
+
+---
+
+#### 4. Result State
+
+بعد وصول النتيجة من Verification Service، اعرضها أسفل الصورة أو بجانبها داخل نفس Workspace.
+
+إذا كانت الحالة:
+
+##### REVIEW / HOLD_FOR_REVIEW
+
+استخدم عنوانًا واضحًا مثل:
+
+**تحتاج مراجعة**
+
+أو حسب decision الفعلي:
+
+**تم تعليق النشر مؤقتًا لحين مراجعة الحالة**
+
+ثم اعرض سببًا مفهومًا من البيانات، مثل:
+
+**وجد النظام تشابهًا بصريًا مع صورة مرتبطة بسجل حقوق، ولم يُحسم وجود إذن مسجل للبائع.**
+
+لا تستخدم لغة تقول:
+
+- الصورة مسروقة
+- الاستخدام غير قانوني
+- تم إثبات التعدي
+
+---
+
+#### 5. Result Metadata
+
+اعرض فقط المعلومات المتاحة فعليًا من Service Layer، مثل:
+
+- marketplace/source
+- registration/reference ID
+- timestamp
+- operational decision
+- match status
+- authorization status
+
+اجعلها compact وواضحة.
+
+لا تجعل `similarity_score` العنصر الرئيسي في Seller View.
+
+---
+
+#### 6. IDHN Verification Component
+
+أظهر «إذن» كخدمة تحقق مدمجة داخل Marketplace.
+
+استخدم:
+
+- IDHN symbol
+- Royal Purple
+- verification trace
+- subtle source/status labels
+
+يمكن أن يظهر نص مثل:
+
+**تم التحقق بواسطة إذن**
+
+أو:
+
+**التحقق من حقوق الصورة بواسطة إذن**
+
+بحسب الحالة.
+
+---
+
+#### 7. Primary CTA بعد النتيجة
+
+##### إذا ALLOW
+
+اعرض CTA مناسبًا مثل: **متابعة النشر**
+
+فقط إذا كان هذا متوافقًا مع contract الحالي.
+
+##### إذا REVIEW / HOLD_FOR_REVIEW
+
+لا تعرض زر نشر يسمح بتجاوز القرار.
+
+اعرض CTA مثل: **عرض تفاصيل التحقق**
+
+أو الحالة التشغيلية المناسبة الحالية.
+
+القرار يجب أن يأتي من Backend / Service Layer.
+
+---
+
+#### 8. حالات الخطأ
+
+إذا فشل التحقق بسبب:
+
+- network
+- invalid file
+- processing error
+- unavailable service
+
+لا تعامل ذلك كـALLOW.
+
+اعرض error state واضح مع:
+
+- السبب
+- retry action إذا كان مناسبًا
+- الحفاظ على الصورة المدخلة
+
+---
+
+#### 9. Visual Hierarchy
+
+الأولوية:
+
+1. الصورة التي رفعها البائع
+2. النتيجة التشغيلية
+3. شرح السبب
+4. metadata
+5. الإجراء التالي
+
+استخدم:
+
+- white canvas
+- lavender verification surface
+- subtle semantic colors
+- thin lines
+- state nodes
+- controlled depth
+
+لا تجعل الواجهة generic admin panel.
+
+---
+
+#### 10. Motion
+
+استخدم انتقالًا وظيفيًا:
+
+Upload preview → verification state → result state
+
+يمكن استخدام:
+
+- shared image
+- progress state morph
+- subtle panel expansion
+
+احترم: `prefers-reduced-motion`
+
+ولا تستخدم fake progress.
+
+---
+
+#### 11. Responsive
+
+Desktop:
+
+- الصورة والنتيجة تستفيد من العرض
+- verification component واضح
+
+Mobile:
+
+- image first
+- result underneath
+- CTA واضح
+- metadata compact
+- no horizontal overflow
+
+---
+
+#### 12. لا تغيّر المنطق
+
+ممنوع:
+
+- hardcoded thresholds
+- legal conclusions
+- seller ID input
+- overriding backend decision
+- fake allow/review logic داخل UI
+
+بعد التنفيذ:
+
+- build
+- lint
+- typecheck
+- Playwright
+- visual QA
+
+ثم أعطني Closure Report يتضمن:
+
+- كيف تعمل الحالة قبل التحقق / أثناء التحقق / بعد النتيجة
+- كيف تغيرت الواجهة بدون فقدان سياق المنتج
+- كيف تظهر «إذن» داخل رحلة البائع
+- كيف تتعامل الحالات ALLOW / REVIEW / HOLD_FOR_REVIEW
+- نتائج الاختبارات
